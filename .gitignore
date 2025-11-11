@@ -1,0 +1,8 @@
+*.pt
+*.npy
+*.mp4
+*.pth
+ImageVideo.mp4
+models/*
+/results/*
+*.pyc

@@ -1,0 +1,109 @@
+# V28视频风格迁移配置文件
+
+# 视频配置
+video:
+  name: "blackswan"
+  data_dir: "/mnt/shared-storage-user/solution/gongyuning/dataset/DAVIS2017/DAVIS/JPEGImages/Full-Resolution/"
+  results_dir: "./results/"
+  fps: 12  # 输出视频帧率
+  # 分辨率重采样配置
+  enable_resize: true  # 是否启用分辨率重采样
+  target_height: 432    # 目标高度（当enable_resize=true时生效）
+  target_width: 768     # 目标宽度（当enable_resize=true时生效）
+  keep_aspect_ratio: true  # 是否保持宽高比
+
+# 风格配置
+style:
+  image_name: "brickTower.png"
+  image_dir: "images/styles/"
+  weight: 100000
+  content_weight: 100
+  resize_arf: false
+
+# 光流配置
+optical_flow:
+  use_precomputed: true
+  consistency_alpha: 0.1
+  consistency_beta: 0.5
+  erode_iterations: 1
+  batch_size: 32
+
+# 场配置
+fields:
+  downsample_ratio: 1
+  alpha_mode: "Matrix33"  # Matrix33 | Matrix44 | alphamode
+  warp_lr_scale: 1000.0
+  alpha_lr_scale: 10.0
+
+# 优化配置
+optimization:
+  lr: 0.0002
+  lr_multiplier: 3.0
+  backward_lr_scale: 0.01
+  num_steps: 40
+  num_steps_first_epoch: 40
+  num_steps_first_frame: 200
+  num_steps_post_epoch: 5
+  post_epoch_threshold: 2
+  epochs: 1
+  epochs_start_refine: -2
+  total_neighbors: 1
+  first_frame_restart_ratio: 70
+  use_flip_mode: false
+  seperate_flip: true
+  only_propagate: false
+  backward_low_lr_mode: false
+  enable_global_random_perspective: false
+  enable_padding_to_square: false
+  disable_warping: false
+  optimizer: "adamw"         # 备选: smoothadam
+  loss_scales: [1.0, 1.0, 1.0]
+  log_interval: 10
+  step_atten_alpha: 1.02
+  save_intermediate: false
+  output_mask: false
+  intermediate_method_name: "larg"
+  matrix_reg_multiplier: 0.5
+  
+# 正则化
+regularization:
+  lambda_l2: 0.0
+  lambda_tv: 0.0
+  lambda_huber: 0.0
+  lambda_jacobian: 1000000.0
+  matrix_reg_weight: 0.03
+  flow_reg_scale: 1.0
+
+# 颜色匹配
+color_matching:
+  enable: true  # 是否启用颜色匹配
+  alpha: 1.0    # 风格化强度 (0.0~1.0)
+  beta: 0.0     # 协方差正则化强度
+
+# 策略开关
+strategy:
+  enable_our_opt: true
+  enable_previous_matching: true
+  enable_masks: true
+  enable_occlusion_aware: true
+  previous_matching:
+    window: 10
+    endpadding: 2
+    mask_threshold: 3
+  occlusion_base_weight:
+    alpha: 0.1
+    warp: 0.01
+  smooth_sigma: 1.0
+  smooth_radius: 5
+
+
+
+# 后处理
+postprocess:
+  smooth_brightness: true
+  smooth_factor: 0.8
+
+# 设备
+device:
+  gpu: "cuda"
+  memory_saving_device: "cpu"
